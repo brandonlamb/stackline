@@ -44,4 +44,6 @@ overlays
 build
 .gradle/
 secrets.md
+product-bulk-import/data.tdf
+product-bulk-import/data.tdf.gz
 

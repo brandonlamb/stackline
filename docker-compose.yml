@@ -1,0 +1,113 @@
+# docker-compose up -d
+# docker run -e ELASTIC_PASSWORD=MagicWord docker.elastic.co/elasticsearch/elasticsearch-platinum:6.2.4
+# docker run -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:6.2.4
+# https://github.com/scylladb/scylla-code-samples/tree/master/elasticsearch-scylla
+
+version: '3'
+
+services:
+  product-read-v1:
+    build: ./product-read-v1
+    ports:
+     - "8080:8080"
+    environment:
+      MY_CONFIG: value
+    depends_on:
+      - es
+    deploy:
+      limits:
+        - cpus: 1
+        - memory: 64M
+  product-write-v1:
+    build: ./product-write-v1
+    ports:
+     - "8081:8080"
+    environment:
+      MY_CONFIG: value
+    depends_on:
+      - es
+    deploy:
+      limits:
+        - cpus: 1
+        - memory: 64M
+  product-manager-v1:
+    build: ./product-manager-v1
+    ports:
+     - "8082:8080"
+    environment:
+      MY_CONFIG: value
+    depends_on:
+      - es
+    deploy:
+      limits:
+        - cpus: 1
+        - memory: 256M
+
+#  db-pgsql:
+#    image: postgres:latest
+#    container_name: postgres_db
+#    volumes:
+#      - ../dumps:/tmp/
+#    ports:
+#      - "5432:5432"
+
+#  db-scylla:
+#    image: scylladb/scylla
+#    container_name: scylla_db
+#    ports:
+#      - 9042:9042
+#      - 9160:9160
+#      - 9180:9180
+#      - 9100:9100
+#      - 7000:7000
+
+  es:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.2.4
+#    networks:
+#      - web
+    ports:
+      - 9200:9200
+      - 9300:9300
+    environment:
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "discovery.zen.ping.unicast.hosts=elasticsearch"
+      - "discovery.type=single-node"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+
+#  elasticsearch-master:
+#    build: ./elasticsearch
+#    restart: always
+#    environment:
+#      - mode=master
+#      - nodes=["elasticsearch-master", "elasticsearch-slave1"]
+#    networks:
+#      - web
+#    ports:
+#      - 9200:9200
+#  elasticsearch-slave1:
+#    build: ./elasticsearch
+#    restart: always
+#    environment:
+#      - mode=slave
+#      - nodes=["elasticsearch-master", "elasticsearch-slave1"]
+#    networks:
+#      - web
+
+#  kafka:
+#    image: wurstmeister/kafka
+#    container_name: kafka
+#    networks:
+#      - web
+
+#networks:
+#  web:
+#    driver: bridge
+#    ipam:
+#      config:
+#        - subnet: 10.10.10.0/16
+
