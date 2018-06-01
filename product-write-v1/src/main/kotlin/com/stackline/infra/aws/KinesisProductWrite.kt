@@ -1,5 +1,5 @@
 package com.stackline.infra.aws
-
+/*
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
 import akka.stream.alpakka.kinesis.KinesisFlowSettings
@@ -84,3 +84,4 @@ class KinesisProductWrite @Inject constructor(
     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
   }
 }
+*/

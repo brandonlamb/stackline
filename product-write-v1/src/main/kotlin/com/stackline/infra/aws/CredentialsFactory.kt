@@ -1,5 +1,5 @@
 package com.stackline.infra.aws
-
+/*
 import com.amazonaws.auth.AWSCredentials
 import com.amazonaws.auth.BasicAWSCredentials
 import io.micronaut.context.annotation.Bean
@@ -17,3 +17,4 @@ class CredentialsFactory @Inject constructor(
   @Singleton
   fun create(): AWSCredentials = BasicAWSCredentials(keyId, keySecret)
 }
+*/

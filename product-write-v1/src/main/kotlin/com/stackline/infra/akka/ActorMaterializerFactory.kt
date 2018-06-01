@@ -4,6 +4,7 @@ import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
 import io.micronaut.context.annotation.Bean
 import io.micronaut.context.annotation.Factory
+import javax.annotation.PreDestroy
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -14,4 +15,9 @@ class ActorMaterializerFactory @Inject constructor(system: ActorSystem) {
   @Bean
   @Singleton
   fun create(): ActorMaterializer = actorMaterializer
+
+  @PreDestroy
+  fun preDestroy() {
+    actorMaterializer.shutdown()
+  }
 }

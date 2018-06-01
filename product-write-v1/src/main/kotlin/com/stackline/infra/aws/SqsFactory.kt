@@ -1,5 +1,5 @@
 package com.stackline.infra.aws
-
+/*
 import com.amazonaws.auth.AWSCredentials
 import com.amazonaws.auth.AWSStaticCredentialsProvider
 import com.amazonaws.regions.Regions.US_WEST_2
@@ -30,3 +30,4 @@ class SqsFactory @Inject constructor(credentials: AWSCredentials) {
     client.shutdown()
   }
 }
+*/
