@@ -23,7 +23,7 @@ class ActorSystemFactory @Inject constructor(config: Config) {
 
   @PreDestroy
   fun preDestroy() {
-    es.awaitTermination(2, SECONDS)
+    es.awaitTermination(1, SECONDS)
     system.terminate()
   }
 }

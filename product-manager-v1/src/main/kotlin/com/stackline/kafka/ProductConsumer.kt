@@ -1,10 +1,10 @@
 package com.stackline.kafka
 
 import akka.actor.ActorSystem
-import akka.kafka.Subscriptions
+import akka.kafka.ConsumerMessage.emptyCommittableOffsetBatch
+import akka.kafka.Subscriptions.topics
 import akka.kafka.javadsl.Consumer
 import akka.stream.ActorMaterializer
-import akka.stream.javadsl.Keep
 import akka.stream.javadsl.Sink
 import com.jsoniter.JsonIterator
 import io.micronaut.context.annotation.Context
@@ -20,24 +20,40 @@ class ProductConsumer @Inject constructor(
 ) : BaseConsumer(system) {
   private val logger = LoggerFactory.getLogger("com.stackline")
 
-  private val control = Consumer
-    .committablePartitionedSource(consumerSettings, Subscriptions.topics(topic))
-    .map { pair ->
-      pair
-        .second()
-        .map {
-          try {
-            println(JsonIterator.deserialize(it.record().value(), Product::class.java))
-          } catch (e: Exception) {
-            logger.error(e.message)
-          }
-          pair
-        }
-        .toMat(Sink.ignore(), Keep.both())
-        .run(materializer)
+//  private val consumer1 = Consumer
+//    .committablePartitionedSource(consumerSettings, topics(topic))
+//    .map { pair ->
+//      pair
+//        .second()
+//        .map {
+//          try {
+//            println(JsonIterator.deserialize(it.record().value(), Product::class.java))
+//          } catch (e: Exception) {
+//            logger.error(e.message)
+//          }
+//          pair
+//        }
+//        .toMat(Sink.ignore(), Keep.both())
+//        .run(materializer)
+//    }
+//    .mapAsyncUnordered(maxPartitions, { it.second() })
+//    .to(Sink.ignore())
+//    .run(materializer)
+
+  private val consumer2 = Consumer
+    .committablePartitionedSource(consumerSettings, topics(topic))
+    .flatMapMerge(maxPartitions, { it.second() })
+    .map {
+      try {
+        println(JsonIterator.deserialize(it.record().value(), Product::class.java))
+      } catch (e: Exception) {
+        logger.error(e.message)
+      }
+      it
     }
-    .mapAsyncUnordered(maxPartitions, { it.second() })
-    .to(Sink.ignore())
-    .run(materializer)
+    .map { it.committableOffset() }
+    .batch(100, { emptyCommittableOffsetBatch().updated(it) }, { batch, elem -> batch.updated(elem) })
+    .mapAsync(8, { it.commitJavadsl() })
+    .runWith(Sink.ignore(), materializer)
 }
 
