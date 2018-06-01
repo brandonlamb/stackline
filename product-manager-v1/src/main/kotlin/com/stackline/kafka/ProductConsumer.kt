@@ -45,7 +45,8 @@ class ProductConsumer @Inject constructor(
     .flatMapMerge(maxPartitions, { it.second() })
     .map {
       try {
-        println(JsonIterator.deserialize(it.record().value(), Product::class.java))
+        val product = JsonIterator.deserialize(it.record().value(), Product::class.java)
+        logger.info("product={}", product.id)
       } catch (e: Exception) {
         logger.error(e.message)
       }
@@ -56,4 +57,3 @@ class ProductConsumer @Inject constructor(
     .mapAsync(8, { it.commitJavadsl() })
     .runWith(Sink.ignore(), materializer)
 }
-

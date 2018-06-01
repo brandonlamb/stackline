@@ -22,8 +22,8 @@ class CreateProductHandler @Inject constructor(
   fun handle(cmd: CreateProduct): Single<Product> = Single.just(cmd.product)
 //    .map { it.also { validator.validate(it) } }
     .flatMap { productService.create(it) }
-    .map {
-      logger.info("Created ${it.id}")
-      it
-    }
+//    .map {
+//      logger.info("Created ${it.id}")
+//      it
+//    }
 }
