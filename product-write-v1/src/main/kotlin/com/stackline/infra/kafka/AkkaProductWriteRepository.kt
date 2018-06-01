@@ -19,7 +19,7 @@ import javax.inject.Singleton
 import kotlin.text.Charsets.UTF_8
 
 @Singleton
-//@Primary
+@Primary
 class AkkaProductWriteRepository @Inject constructor(
   system: ActorSystem
 ) : ProductWriteRepository, Logger {
