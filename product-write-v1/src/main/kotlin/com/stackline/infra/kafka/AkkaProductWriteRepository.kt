@@ -19,8 +19,8 @@ import javax.inject.Singleton
 import kotlin.text.Charsets.UTF_8
 
 @Singleton
-@Primary
-class ProductWriteRepository @Inject constructor(
+//@Primary
+class AkkaProductWriteRepository @Inject constructor(
   system: ActorSystem
 ) : ProductWriteRepository, Logger {
   private val producerSettings = ProducerSettings.create(system, StringSerializer(), ByteArraySerializer())

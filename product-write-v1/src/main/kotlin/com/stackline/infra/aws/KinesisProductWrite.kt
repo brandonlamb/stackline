@@ -14,7 +14,7 @@ import com.amazonaws.services.kinesis.model.ShardIteratorType
 import com.jsoniter.output.JsonStream
 import com.stackline.product.domain.Product
 import com.stackline.product.domain.ProductId
-import com.stackline.product.domain.api.ProductWriteRepository
+import com.stackline.product.domain.api.AkkaProductWriteRepository
 import io.micronaut.context.annotation.Value
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
@@ -31,7 +31,7 @@ class KinesisProductWrite @Inject constructor(
   private val materializer: ActorMaterializer,
   private val kinesisClient: AmazonKinesisAsync,
   @Value("\${stackline.aws.kinesis.create-product-stream-name}") private val streamName: String
-) : ProductWriteRepository {
+) : AkkaProductWriteRepository {
   private val logger = LoggerFactory.getLogger("com.stackline")
 
   private val settings = ShardSettings.create(streamName, "shardId-000000000000")

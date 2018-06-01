@@ -12,7 +12,7 @@ import com.amazonaws.services.sqs.model.SendMessageRequest
 import com.jsoniter.output.JsonStream
 import com.stackline.product.domain.Product
 import com.stackline.product.domain.ProductId
-import com.stackline.product.domain.api.ProductWriteRepository
+import com.stackline.product.domain.api.AkkaProductWriteRepository
 import io.micronaut.context.annotation.Primary
 import io.micronaut.context.annotation.Value
 import io.reactivex.Single
@@ -28,7 +28,7 @@ class SqsProductWrite @Inject constructor(
   private val materializer: ActorMaterializer,
   private val sqsClient: AmazonSQSAsync,
   @Value("\${stackline.aws.sqs.create-product}") private val sqsEndpoint: String
-) : ProductWriteRepository {
+) : AkkaProductWriteRepository {
   private val logger = LoggerFactory.getLogger("com.stackline")
 
   private val settings = SqsSourceSettings.Defaults()
