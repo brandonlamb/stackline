@@ -9,12 +9,12 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Factory
-class CredentialsFactory @Inject constructor(
-  @Value("\${stackline.aws.key-id}") private val keyId: String,
-  @Value("\${stackline.aws.key-secret}") private val keySecret: String
-) {
+class CredentialsFactory {
   @Bean
   @Singleton
-  fun create(): AWSCredentials = BasicAWSCredentials(keyId, keySecret)
+  fun create(
+    @Value("\${stackline.aws.key-id}") private val keyId: String,
+    @Value("\${stackline.aws.key-secret}") private val keySecret: String
+  ): AWSCredentials = BasicAWSCredentials(keyId, keySecret)
 }
 */
