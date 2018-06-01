@@ -1,0 +1,34 @@
+---
+micronaut:
+  application:
+    name: product-read-v1
+#  security:
+#    enabled: false
+#    endpoints:
+#      login:
+#        enabled: true
+#      oauth:
+#        enabled: true
+#    token:
+#      jwt:
+#        enabled: true
+#        signatures:
+#          secret:
+#            generator:
+#              secret: "${JWT_GENERATOR_SIGNATURE_SECRET:secret}"
+  server:
+    port: 8080
+    host: 0.0.0.0
+stackline:
+  api:
+    product-read-v1: ${PRODUCT_READ_V1:http://localhost:8080/v1/products}
+  aws:
+    key-id: "${AWS_KEY_ID:AKIAICYH564PXADTAE7Q}"
+    key-secret: "${AWS_KEY_SECRET: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}"
+    kinesis:
+      create-product: "arn:aws:kinesis:us-west-2:837791380826:stream/stackline-create-product-v1"
+      create-product-stream-name: "stackline-create-product-v1"
+    sns:
+      create-product: arn:aws:sns:us-west-2:837791380826:stackline-create-product-v1
+    sqs:
+      create-product: https://sqs.us-west-2.amazonaws.com/837791380826/create-product

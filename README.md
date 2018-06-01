@@ -92,6 +92,13 @@ This service does not expose any REST endpoints (other than internal health, rea
 * Pain in the ass figuring out how to build a solution to hand to someone with zero supporting infrastructure
 * Initially tried JS solution for the bulk import script, gave up, just not good enough to quickly knock out a JS solution
 
+### Kafka/Zookeeper single setup
+
+```
+docker-compose exec kafka  \
+kafka-topics --create --topic foo --partitions 1 --replication-factor 1 --if-not-exists --zookeeper localhost:32181
+```
+
 ## Research
 
 In an attempt at doing some pro-active research, searching store.docker.com and github.com returned some other candidates work. Giving myself an edge, my intent is to then provide an improved solution knowing the problem domain.

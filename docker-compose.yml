@@ -2,46 +2,49 @@
 # docker run -e ELASTIC_PASSWORD=MagicWord docker.elastic.co/elasticsearch/elasticsearch-platinum:6.2.4
 # docker run -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:6.2.4
 # https://github.com/scylladb/scylla-code-samples/tree/master/elasticsearch-scylla
+# https://docs.confluent.io/current/installation/docker/docs/quickstart.html
 
 version: '3'
 
 services:
-  product-read-v1:
-    build: ./product-read-v1
-    ports:
-     - "8080:8080"
-    environment:
-      MY_CONFIG: value
-    depends_on:
-      - es
-    deploy:
-      limits:
-        - cpus: 1
-        - memory: 64M
-  product-write-v1:
-    build: ./product-write-v1
-    ports:
-     - "8081:8080"
-    environment:
-      MY_CONFIG: value
-    depends_on:
-      - es
-    deploy:
-      limits:
-        - cpus: 1
-        - memory: 64M
-  product-manager-v1:
-    build: ./product-manager-v1
-    ports:
-     - "8082:8080"
-    environment:
-      MY_CONFIG: value
-    depends_on:
-      - es
-    deploy:
-      limits:
-        - cpus: 1
-        - memory: 256M
+  # product-read-v1:
+  #   build: ./product-read-v1
+  #   ports:
+  #    - "8080:8080"
+  #   environment:
+  #     MY_CONFIG: value
+  #   depends_on:
+  #     - es
+    # deploy:
+    #   limits:
+    #     - cpus: 1
+    #     - memory: 64M
+
+  # product-write-v1:
+  #   build: ./product-write-v1
+  #   ports:
+  #    - "8081:8080"
+  #   environment:
+  #     MY_CONFIG: value
+  #   depends_on:
+  #     - es
+    # deploy:
+    #   limits:
+    #     - cpus: 1
+    #     - memory: 64M
+
+  # product-manager-v1:
+  #   build: ./product-manager-v1
+  #   ports:
+  #    - "8082:8082"
+  #   environment:
+  #     MY_CONFIG: value
+  #   depends_on:
+  #     - es
+    # deploy:
+    #   limits:
+    #     - cpus: 1
+    #     - memory: 256M
 
 #  db-pgsql:
 #    image: postgres:latest
@@ -104,10 +107,35 @@ services:
 #    networks:
 #      - web
 
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    # network_mode: host
+    ports:
+      - 2181:2181
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    extra_hosts:
+      - "moby:127.0.0.1"
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    # network_mode: host
+    ports:
+      - 9092:9092
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    extra_hosts:
+      - "moby:127.0.0.1"
+
 #networks:
 #  web:
 #    driver: bridge
 #    ipam:
 #      config:
 #        - subnet: 10.10.10.0/16
-
