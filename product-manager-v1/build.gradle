@@ -60,6 +60,7 @@ dependencies {
 //  compile "com.lightbend.akka:akka-stream-alpakka-sns_2.12:0.19"
 //  compile "com.lightbend.akka:akka-stream-alpakka-kinesis_2.12:0.19"
 //  compile "io.projectreactor:reactor-core:3.1.7.RELEASE"
+//  compile "io.projectreactor:reactor-bus:2.0.8.RELEASE"
 //  compile "com.datastax.cassandra:cassandra-driver-core:3.5.0"
 //  compile "org.apache.commons:commons-csv:1.5"
   compileOnly "io.micronaut:inject-java"

@@ -1,54 +1,31 @@
 package com.stackline.kafka
 
 import akka.actor.ActorSystem
+import akka.actor.Props
 import akka.kafka.ConsumerMessage.emptyCommittableOffsetBatch
 import akka.kafka.Subscriptions.topics
 import akka.kafka.javadsl.Consumer
 import akka.stream.ActorMaterializer
 import akka.stream.javadsl.Sink
 import com.jsoniter.JsonIterator
-import io.micronaut.context.annotation.Context
-import io.micronaut.context.annotation.Value
 import org.slf4j.LoggerFactory
-import javax.inject.Inject
 
-@Context
-class ProductConsumer @Inject constructor(
+class ProductConsumer(
   system: ActorSystem,
   materializer: ActorMaterializer,
-  @Value("\${stackline.kafka.topic}") private val topic: String
+  topic: String
 ) : BaseConsumer(system) {
   private val logger = LoggerFactory.getLogger("com.stackline")
 
-//  private val consumer1 = Consumer
-//    .committablePartitionedSource(consumerSettings, topics(topic))
-//    .map { pair ->
-//      pair
-//        .second()
-//        .map {
-//          try {
-//            println(JsonIterator.deserialize(it.record().value(), Product::class.java))
-//          } catch (e: Exception) {
-//            logger.error(e.message)
-//          }
-//          pair
-//        }
-//        .toMat(Sink.ignore(), Keep.both())
-//        .run(materializer)
-//    }
-//    .mapAsyncUnordered(maxPartitions, { it.second() })
-//    .to(Sink.ignore())
-//    .run(materializer)
-
-  private val consumer2 = Consumer
+  private val consumer = Consumer
     .committablePartitionedSource(consumerSettings, topics(topic))
     .flatMapMerge(maxPartitions, { it.second() })
     .map {
       try {
         val product = JsonIterator.deserialize(it.record().value(), Product::class.java)
-        logger.info("product={}", product.id)
+        logger.info("event=ProductCreated id={}", product.id)
       } catch (e: Exception) {
-        logger.error(e.message)
+        logger.error("event=CreateProductFailed message={}", e.message)
       }
       it
     }
@@ -56,4 +33,11 @@ class ProductConsumer @Inject constructor(
     .batch(100, { emptyCommittableOffsetBatch().updated(it) }, { batch, elem -> batch.updated(elem) })
     .mapAsync(8, { it.commitJavadsl() })
     .runWith(Sink.ignore(), materializer)
+
+  override fun createReceive(): Receive = receiveBuilder().matchAny { println(it) }.build()
+
+  companion object {
+    fun props(system: ActorSystem, materializer: ActorMaterializer, topic: String): Props =
+      Props.create(ProductConsumer::class.java, system, materializer, topic)
+  }
 }
