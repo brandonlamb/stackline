@@ -25,3 +25,14 @@ data class Product(
   val categoryId: Long,
   val categoryName: String
 )
+
+data class DefaultConfig(
+  val apiProductRead: String,
+  val apiProductWrite: String,
+  val ctxPoolSize: Int,
+  val dataFilename: String,
+  val dataUrl: String,
+  val downloadFile: Boolean,
+  val esHost: String,
+  val esPort: Int
+)

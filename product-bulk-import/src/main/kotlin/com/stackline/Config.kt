@@ -1,10 +1,20 @@
 package com.stackline
 
+import com.typesafe.config.ConfigFactory
+
 object Config {
-  const val URL = "https://s3-us-west-2.amazonaws.com/stackline-public/sample_product_data.tsv.gz"
-  const val DOWNLOAD_FILE = "data.tdf.gz"
-  const val DATA_FILE = "data.tdf"
-  const val CTX_POOL_SIZE = 32
-  const val PRODUCT_READ_URL = "http://localhost:8080/v1/products"
-  const val PRODUCT_WRITE_URL = "http://localhost:8080/v1/products"
+  fun create(): DefaultConfig {
+    val config = ConfigFactory.load().getConfig("stackline")
+
+    return DefaultConfig(
+      apiProductRead = config.getString("api.product-read"),
+      apiProductWrite = config.getString("api.product-write"),
+      ctxPoolSize = config.getInt("ctx-pool-size"),
+      dataFilename = config.getString("data.filename"),
+      dataUrl = config.getString("data.url"),
+      downloadFile = config.getBoolean("download-file"),
+      esHost = config.getString("es.host"),
+      esPort = config.getInt("es.port")
+    )
+  }
 }

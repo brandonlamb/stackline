@@ -29,8 +29,8 @@ Given my current experienced and tech stack acumen, I would probably implement a
 
 ### Technology Stack
 
-* Amazon SNS for asynchronous message processing. By using a topic, we keep open the possibility for some refactoring later (think serverless/functions) for multiple consumers, such as splitting indexing into ES and persisting to DynamoDB
-* Amazon DynamoDB for scalable, PaaS-based big data
+* Apache Kafka for asynchronous message processing. By using a topic, we keep open the possibility for some refactoring later (think serverless/functions) for multiple consumers, such as splitting indexing into ES and persisting to DynamoDB
+* ScyllaDB for scalable, big data, primary persistence
 * ElasticSearch is designed for searching your data. Compliments your primary data store
 * JVM-based microservices written in Kotlin
   * Micronaut Framework (http://micronaut.io/)
@@ -45,27 +45,25 @@ Given my current experienced and tech stack acumen, I would probably implement a
 * CQRS (Command Query Responsibility Segregation)
 * Domain-Driven Design
 * Ports-and-Adapters
-* Reactive
+* Reactive (Reactor 3 and akka-streams)
 * Google Java Style Guide (see `GoogleStyleGuide.xml`)
 * "Tell, Don't Ask" configuration
 * Shared code as anti-pattern in microservices
+* Asynchronous, event-based via Kafka
 
 ### Pragmatic REST Design
 
-* Lower-kabob-style, plural nouns for routes
-  * /products/by-id Good
-  * /products/by_id Bad
-  * /products/byId Bad
-  * /Products/ById Bad
+* Lowercase, kabob-style, plural nouns for routes
 * Paging object for collection endpoints: limit, offset, total, returned
 * camelCase properties to cater to wider audience (Java, JavaScript)
 * HTTP verbs
-  * POST: create, sometimes update. idempotent
+  * POST: create, sometimes update.
   * PUT: update, sometimes create if ID can be client-provided (UUID)
   * DELETE: obviously
-  * GET: hopefully obvious, idempotent
+  * GET: reads/fetch data
 * URL/path-based versioning. Versioning per repository (vs branching, packages, etc)
 * Security should be a consideration (JWT, OAuth2, Token, HMAC). Will implement only if time
+* i18n, not everyone speaks english. Use standard Accept-Language header to support translation
 
 ### Microservices
 
@@ -73,9 +71,13 @@ A design decision made on a case-by-case basis is "what size?" to make a microse
 
 #### product-read-v1
 
+This represents the read-optimized side of CQRS.
+
 This service is responsible for all read operations for products, such as findings products, fetching a specific product, fetching product categories, etc.
 
 #### product-write-v1
+
+This represents the write-optimized side of CQRS.
 
 This service is responsible for all write operations for products. This is the service used to trigger the streaming batch process of downloading the TDF and importing product data. There is an asynchronous boundary between the write and manager by means of SNS (or Kafka, SQS, other queue/topic technology).
 
@@ -86,24 +88,17 @@ This service does not expose any REST endpoints (other than internal health, rea
 ## Learnings
 
 * First time using docker-compose
-* First time using AWS SNS and DynamoDB
-* First time using AWS IAM
+* First time using AWS IAM, SQS, SNS and DynamoDB. Went with what I know instead due to time (Kafka, Scylla)
 * Micronaut Framework (released only days ago)
 * Pain in the ass figuring out how to build a solution to hand to someone with zero supporting infrastructure
 * Initially tried JS solution for the bulk import script, gave up, just not good enough to quickly knock out a JS solution
-
-### Kafka/Zookeeper single setup
-
-```
-docker-compose exec kafka  \
-kafka-topics --create --topic foo --partitions 1 --replication-factor 1 --if-not-exists --zookeeper localhost:32181
-```
 
 ## Research
 
 In an attempt at doing some pro-active research, searching store.docker.com and github.com returned some other candidates work. Giving myself an edge, my intent is to then provide an improved solution knowing the problem domain.
 
 * https://github.com/morsen/stackline-assessment
+* https://github.com/kozubenkob/stackline
 * https://github.com/misterrandom/stackline-sample
 * https://github.com/datrived/stackline_searchapi
 * https://store.docker.com/community/images/morsen/stackline-assessment

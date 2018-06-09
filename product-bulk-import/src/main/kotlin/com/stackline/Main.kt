@@ -10,21 +10,22 @@ object Main {
   fun main(args: Array<String>) {
     println("Bulk import started ${LocalDateTime.now()}")
 
-    val downloadFlag = System.getProperty("stackline.downloadFile", "true")!!.toBoolean()
+    val config = Config.create()
 
-    val ctx = newFixedThreadPoolContext(Config.CTX_POOL_SIZE, "product-ctx")
+    val ctx = newFixedThreadPoolContext(config.ctxPoolSize, "product-ctx")
     val client = OkHttpClientFactory.create()
+    val esClient = ElasticSearchFactory.create(config)
     val downloader = Downloader()
     val productService = ProductService(
       ctx,
       client,
-      Config.DATA_FILE,
-      Config.PRODUCT_WRITE_URL
+      config.dataFilename,
+      config.apiProductWrite
     )
 
-    if (downloadFlag) {
-      downloader.download(client, Config.URL, Config.DOWNLOAD_FILE)
-      downloader.decompress(Config.DOWNLOAD_FILE, Config.DATA_FILE)
+    if (config.downloadFile) {
+      downloader.download(client, config.apiProductWrite, config.dataFilename)
+      downloader.decompress(config.dataUrl, config.dataFilename)
     }
 
     runBlocking(ctx) {

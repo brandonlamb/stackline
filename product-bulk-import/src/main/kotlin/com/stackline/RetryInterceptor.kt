@@ -13,6 +13,7 @@ class RetryInterceptor : Interceptor {
     val request = chain.request()
     var response: Response
     var count = 0
+
     do {
       count.takeIf { it > 0 }?.let {
         Thread.sleep(waitTime.toMillis())

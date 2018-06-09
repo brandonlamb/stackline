@@ -30,7 +30,7 @@ class AkkaProductWriteRepository @Inject constructor(
   override fun create(product: Product): Single<Product> {
     return Single.just(product)
       .map {
-        getLogger().info("product={}", it.id)
+        getLogger().info("event=ProductCreated id={}", it.id)
         it
       }
       .map {

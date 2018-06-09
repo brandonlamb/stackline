@@ -31,7 +31,7 @@ class ProductConsumer(
     }
     .map { it.committableOffset() }
     .batch(100, { emptyCommittableOffsetBatch().updated(it) }, { batch, elem -> batch.updated(elem) })
-    .mapAsync(8, { it.commitJavadsl() })
+    .mapAsync(4, { it.commitJavadsl() })
     .runWith(Sink.ignore(), materializer)
 
   override fun createReceive(): Receive = receiveBuilder().matchAny { println(it) }.build()

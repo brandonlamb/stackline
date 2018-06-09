@@ -32,5 +32,10 @@ stackline:
       create-product: arn:aws:sns:us-west-2:837791380826:stackline-create-product-v1
     sqs:
       create-product: https://sqs.us-west-2.amazonaws.com/837791380826/create-product
+  elasticsearch:
+    host: ${ES_HOST:localhost}
+    index: stackline
+    port: ${ES_PORT:9200}
+    type: product
   kafka:
     topic: create-product-v1
