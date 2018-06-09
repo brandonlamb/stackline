@@ -1,10 +1,20 @@
 package com.stackline
 
+import com.stackline.config.Config
+import com.stackline.elasticsearch.CreateIndex
+import com.stackline.elasticsearch.ElasticSearchFactory
+import com.stackline.elasticsearch.IndexHandler
+import com.stackline.rest.Downloader
+import com.stackline.rest.OkHttpClientFactory
+import com.stackline.rest.ProductService
 import kotlinx.coroutines.experimental.newFixedThreadPoolContext
 import kotlinx.coroutines.experimental.runBlocking
 import java.net.ConnectException
 import java.time.LocalDateTime
 
+/**
+ * This is a very hacky, quick and dirty solution to bootstrap various services
+ */
 object Main {
   @JvmStatic
   fun main(args: Array<String>) {
@@ -13,7 +23,7 @@ object Main {
     val config = Config.create()
 
     val ctx = newFixedThreadPoolContext(config.ctxPoolSize, "product-ctx")
-    val client = OkHttpClientFactory.create()
+    val client = OkHttpClientFactory.create(config)
     val esClient = ElasticSearchFactory.create(config)
     val downloader = Downloader()
     val productService = ProductService(
@@ -22,6 +32,8 @@ object Main {
       config.dataFilename,
       config.apiProductWrite
     )
+    val indexHandler = IndexHandler(config, esClient)
+    indexHandler.handle(CreateIndex(config.esIndex))
 
     if (config.downloadFile) {
       downloader.download(client, config.apiProductWrite, config.dataFilename)

@@ -31,7 +31,7 @@ Given my current experienced and tech stack acumen, I would probably implement a
 
 * Apache Kafka for asynchronous message processing. By using a topic, we keep open the possibility for some refactoring later (think serverless/functions) for multiple consumers, such as splitting indexing into ES and persisting to DynamoDB
 * ScyllaDB for scalable, big data, primary persistence
-* ElasticSearch is designed for searching your data. Compliments your primary data store
+* ElasticSearch is designed for searching data. Compliments your primary data store
 * JVM-based microservices written in Kotlin
   * Micronaut Framework (http://micronaut.io/)
   * Reactor 3 for reactive streams
@@ -64,6 +64,15 @@ Given my current experienced and tech stack acumen, I would probably implement a
 * URL/path-based versioning. Versioning per repository (vs branching, packages, etc)
 * Security should be a consideration (JWT, OAuth2, Token, HMAC). Will implement only if time
 * i18n, not everyone speaks english. Use standard Accept-Language header to support translation
+
+### Bootstrap
+
+`product-bulk-import-v1` will do a few initialization/bootstrapping tasks.
+
+1. Create ElasticSearch Index (`stackline`)
+1. Create ElasticSearch Type (`product`)
+1. Download TDF (tab-delimited file)
+1. Parse data file, post to product-write
 
 ### Microservices
 

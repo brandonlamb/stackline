@@ -1,4 +1,4 @@
-package com.stackline
+package com.stackline.rest
 
 import okhttp3.Interceptor
 import okhttp3.Response

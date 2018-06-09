@@ -1,0 +1,24 @@
+{
+  "product": {
+    "properties": {
+      "id": {
+        "type": "text"
+      },
+      "description": {
+        "type": "text"
+      },
+      "sellerId": {
+        "type": "long"
+      },
+      "sellerName": {
+        "type": "text"
+      },
+      "categoryId": {
+        "type": "long"
+      },
+      "categoryName": {
+        "type": "text"
+      }
+    }
+  }
+}

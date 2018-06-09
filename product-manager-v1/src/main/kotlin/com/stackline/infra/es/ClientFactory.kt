@@ -14,5 +14,5 @@ class ClientFactory {
   fun create(
     @Value("\${stackline.elasticsearch.host}") host: String,
     @Value("\${stackline.elasticsearch.port}") port: Int
-  ) = RestClient.builder(HttpHost(host, port)).build()
+  ): RestClient = RestClient.builder(HttpHost(host, port)).build()
 }

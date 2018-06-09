@@ -1,7 +1,7 @@
 ---
 micronaut:
   application:
-    name: product-manager-v1
+    name: ${APP_NAME:product-manager-v1}
 #  security:
 #    enabled: false
 #    endpoints:
@@ -21,21 +21,21 @@ micronaut:
     host: 0.0.0.0
 stackline:
   api:
-    product-read-v1: ${PRODUCT_READ_V1:http://localhost:8080/v1/products}
+    product-read-v1: ${PRODUCT_READ_V1:http://product-read-v1:8080/v1/products}
   aws:
     key-id: "${AWS_KEY_ID:AKIAICYH564PXADTAE7Q}"
     key-secret: "${AWS_KEY_SECRET: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}"
     kinesis:
       create-product: "arn:aws:kinesis:us-west-2:837791380826:stream/stackline-create-product-v1"
-      create-product-stream-name: "stackline-create-product-v1"
+      create-product-stream-name: stackline-create-product-v1
     sns:
       create-product: arn:aws:sns:us-west-2:837791380826:stackline-create-product-v1
     sqs:
       create-product: https://sqs.us-west-2.amazonaws.com/837791380826/create-product
   elasticsearch:
-    host: ${ES_HOST:localhost}
-    index: stackline
+    host: ${ES_HOST:es}
+    index: ${ES_INDEX:stackline}
     port: ${ES_PORT:9200}
-    type: product
+    type: ${ES_TYPE:product}
   kafka:
-    topic: create-product-v1
+    topic: ${CREATE_PRODUCT_TOPIC:create-product-v1}

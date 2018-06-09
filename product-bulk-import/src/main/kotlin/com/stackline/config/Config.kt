@@ -1,4 +1,4 @@
-package com.stackline
+package com.stackline.config
 
 import com.typesafe.config.ConfigFactory
 
@@ -14,7 +14,9 @@ object Config {
       dataUrl = config.getString("data.url"),
       downloadFile = config.getBoolean("download-file"),
       esHost = config.getString("es.host"),
-      esPort = config.getInt("es.port")
+      esIndex = config.getString("es.index"),
+      esPort = config.getInt("es.port"),
+      esTypeProduct = config.getString("es.product-type-mapping")
     )
   }
 }

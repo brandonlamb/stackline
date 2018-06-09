@@ -1,5 +1,14 @@
 package com.stackline
 
+data class Product(
+  val id: String,
+  val description: String,
+  val sellerId: Long,
+  val sellerName: String,
+  val categoryId: Long,
+  val categoryName: String
+)
+
 /**
  * Extension function to convert a line from the flat-file source into a product
  */
@@ -16,23 +25,3 @@ fun String.toProduct(): Product {
     categoryName = p[5]
   )
 }
-
-data class Product(
-  val id: String,
-  val description: String,
-  val sellerId: Long,
-  val sellerName: String,
-  val categoryId: Long,
-  val categoryName: String
-)
-
-data class DefaultConfig(
-  val apiProductRead: String,
-  val apiProductWrite: String,
-  val ctxPoolSize: Int,
-  val dataFilename: String,
-  val dataUrl: String,
-  val downloadFile: Boolean,
-  val esHost: String,
-  val esPort: Int
-)
