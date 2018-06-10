@@ -6,15 +6,17 @@ import akka.stream.alpakka.elasticsearch.javadsl.ElasticsearchSink
 import akka.stream.alpakka.elasticsearch.javadsl.ElasticsearchSinkSettings
 import akka.stream.javadsl.Source
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.stackline.product.domain.Product as DomainProduct
 import com.stackline.product.domain.api.ProductWriteRepository
 import io.micronaut.context.annotation.Value
 import io.reactivex.Single
 import org.elasticsearch.client.RestClient
 import javax.inject.Inject
+import javax.inject.Named
 import javax.inject.Singleton
+import com.stackline.product.domain.Product as DomainProduct
 
 @Singleton
+@Named("es")
 class ProductWriteRepository @Inject constructor(
   private val client: RestClient,
   private val mapper: ObjectMapper,

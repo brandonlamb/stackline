@@ -1,4 +1,5 @@
 package com.stackline.infra.eventbus
+
 /*
 import io.micronaut.context.annotation.Bean
 import io.micronaut.context.annotation.Factory
