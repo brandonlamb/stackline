@@ -1,9 +1,6 @@
 package com.stackline
 
 import com.stackline.config.Config
-import com.stackline.elasticsearch.CreateIndex
-import com.stackline.elasticsearch.ElasticSearchFactory
-import com.stackline.elasticsearch.IndexHandler
 import com.stackline.rest.Downloader
 import com.stackline.rest.OkHttpClientFactory
 import com.stackline.rest.ProductService
@@ -24,7 +21,7 @@ object Main {
 
     val ctx = newFixedThreadPoolContext(config.ctxPoolSize, "product-ctx")
     val client = OkHttpClientFactory.create(config)
-    val esClient = ElasticSearchFactory.create(config)
+//    val esClient = ElasticSearchFactory.create(config)
     val downloader = Downloader()
     val productService = ProductService(
       ctx,
@@ -32,8 +29,8 @@ object Main {
       config.dataFilename,
       config.apiProductWrite
     )
-    val indexHandler = IndexHandler(config, esClient)
-    indexHandler.handle(CreateIndex(config.esIndex))
+//    val indexHandler = IndexHandler(config, esClient)
+//    indexHandler.handle(CreateIndex(config.esIndex))
 
     if (config.downloadFile) {
       downloader.download(client, config.apiProductWrite, config.dataFilename)

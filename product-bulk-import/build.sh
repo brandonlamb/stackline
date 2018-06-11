@@ -13,6 +13,7 @@ if [ ${STATUS} -eq 0 ]; then
         --memory 64m \
         --env APP_ENV=test \
         --name stackline-product-bulk-import-v1 \
+        --env ES_HOST=localhost \
         --network host \
         stackline-product-bulk-import-v1:latest
 else

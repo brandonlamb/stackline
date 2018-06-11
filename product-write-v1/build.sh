@@ -14,6 +14,7 @@ if [ ${STATUS} -eq 0 ]; then
         --memory 64m \
         --publish 8080:8080 \
         --env APP_ENV=test \
+        --env KAFKA_HOSTS="localhost:9092" \
         --name stackline-product-write-v1 \
         --network host \
         stackline-product-write-v1:latest

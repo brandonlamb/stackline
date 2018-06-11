@@ -1,5 +1,5 @@
 package com.stackline.elasticsearch
-
+/*
 import com.stackline.config.DefaultConfig
 import org.elasticsearch.action.admin.indices.alias.Alias
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest
@@ -31,3 +31,4 @@ class IndexHandler(
 
   private fun productType(): String = File(config.esTypeProduct).readText(Charsets.UTF_8)
 }
+*/
