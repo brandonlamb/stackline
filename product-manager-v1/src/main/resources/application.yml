@@ -21,7 +21,7 @@ micronaut:
     host: 0.0.0.0
 stackline:
   api:
-    product-read-v1: ${PRODUCT_READ_V1:http://product-read-v1:8080/v1/products}
+    product-read-v1: ${PRODUCT_READ_V1:http://stackline_product_read_v1_1:8080/v1/products}
   aws:
     key-id: "${AWS_KEY_ID:AKIAICYH564PXADTAE7Q}"
     key-secret: "${AWS_KEY_SECRET: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}"
@@ -33,7 +33,7 @@ stackline:
     sqs:
       create-product: https://sqs.us-west-2.amazonaws.com/837791380826/create-product
   elasticsearch:
-    host: ${ES_HOST:es}
+    host: ${ES_HOST:stackline_es_1}
     index: ${ES_INDEX:stackline}
     port: ${ES_PORT:9200}
     type: ${ES_TYPE:product}

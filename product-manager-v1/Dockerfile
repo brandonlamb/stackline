@@ -4,6 +4,7 @@ FROM adoptopenjdk/openjdk8-openj9:jdk8u162-b12_openj9-0.8.0
 
 RUN apt-get update && \
     apt-get dist-upgrade -y && \
+    apt-get install iputils-ping -y && \
     mkdir -p /opt/shareclasses && \
     mkdir -p /opt/app
 

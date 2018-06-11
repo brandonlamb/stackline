@@ -11,10 +11,11 @@ if [ ${STATUS} -eq 0 ]; then
 
     # Run the platform image
     docker run -it --rm \
-        --memory 128m \
-        --publish 8081:8080 \
+        --memory 64m \
+        --publish 8080:8080 \
         --env APP_ENV=test \
         --name stackline-product-write-v1 \
+        --network host \
         stackline-product-write-v1:latest
 else
     echo "Build failed"

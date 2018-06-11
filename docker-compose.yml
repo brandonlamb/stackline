@@ -21,33 +21,37 @@ services:
     #     - memory: 64M
 
   # product-write-v1:
-  #   build: ./product-write-v1
+  #   # build: ./product-write-v1
+  #   image: stackline-product-write-v1
   #   ports:
-  #    - "8081:8080"
-  #   environment:
-      # MY_CONFIG: value
-      # KAFKA_HOSTS: kafka:9092
+  #    - "8080:8080"
+  #   # environment:
+  #   #   MY_CONFIG: value
+  #   #   KAFKA_HOSTS: kafka:9092
   #   depends_on:
-      # - kafka
-    # deploy:
-    #   limits:
-    #     - cpus: 1
-    #     - memory: 64M
+  #     - kafka
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         cpus: '1'
+  #         memory: 64M
 
   # product-manager-v1:
-  #   build: ./product-manager-v1
+  #   #build: ./product-manager-v1
+  #   image: stackline-product-manager-v1
   #   ports:
   #    - "8082:8082"
-  #   environment:
-  #     MY_CONFIG: value
-  #     KAFKA_HOSTS: kafka:9092
+  #   # environment:
+  #   #   MY_CONFIG: value
+  #   #   KAFKA_HOSTS: kafka:9092
   #   depends_on:
-      # - es
-      # - kafka
-    # deploy:
-    #   limits:
-    #     - cpus: 1
-    #     - memory: 256M
+  #     - es
+  #     - kafka
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         cpus: '2'
+  #         memory: 128M
 
 #  db-pgsql:
 #    image: postgres:latest
@@ -69,8 +73,7 @@ services:
 
   es:
     image: docker.elastic.co/elasticsearch/elasticsearch:6.2.4
-#    networks:
-#      - web
+    network_mode: host
     ports:
       - 9200:9200
       - 9300:9300
@@ -84,6 +87,8 @@ services:
       memlock:
         soft: -1
         hard: -1
+    # networks:
+    #   - stackline
 
 #  elasticsearch-master:
 #    build: ./elasticsearch
@@ -112,7 +117,7 @@ services:
 
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
-    # network_mode: host
+    network_mode: host
     ports:
       - 2181:2181
     environment:
@@ -120,25 +125,29 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
     extra_hosts:
       - "moby:127.0.0.1"
+    # networks:
+    #   - stackline
 
   kafka:
     image: confluentinc/cp-kafka:latest
-    # network_mode: host
+    network_mode: host
     ports:
       - 9092:9092
     depends_on:
       - zookeeper
     environment:
       KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ZOOKEEPER_CONNECT: localhost:2181
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     extra_hosts:
       - "moby:127.0.0.1"
+    # networks:
+    #   - stackline
 
-#networks:
-#  web:
-#    driver: bridge
-#    ipam:
-#      config:
-#        - subnet: 10.10.10.0/16
+# networks:
+#   stackline:
+#     driver: bridge
+#     ipam:
+#       config:
+#         - subnet: 10.10.10.0/16

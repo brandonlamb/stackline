@@ -10,6 +10,7 @@ import com.stackline.product.domain.api.ProductWriteRepository
 import io.micronaut.context.annotation.Value
 import io.reactivex.Single
 import org.elasticsearch.client.RestClient
+import org.slf4j.LoggerFactory
 import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton
@@ -24,10 +25,12 @@ class ProductWriteRepository @Inject constructor(
   @Value("\${stackline.elasticsearch.index}") private val index: String,
   @Value("\${stackline.elasticsearch.type}") private val type: String
 ) : ProductWriteRepository {
+  private val logger = LoggerFactory.getLogger("com.stackline")
   private val sinkSettings = ElasticsearchSinkSettings()
 
   override fun create(product: DomainProduct): Single<DomainProduct> = Single.fromFuture(Source.single(product)
     .map { IncomingMessage.create(it.id, product.toEs()) }
-    .runWith(ElasticsearchSink.create(index, type, sinkSettings, client, mapper), materializer).toCompletableFuture()
-  ).map { product }
+    .runWith(ElasticsearchSink.create(index, type, sinkSettings, client, mapper), materializer).toCompletableFuture())
+    .map { logger.info("type=IndexProduct product={}", product) }
+    .map { product }
 }
