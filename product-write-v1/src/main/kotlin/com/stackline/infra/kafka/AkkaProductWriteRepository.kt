@@ -15,6 +15,7 @@ import org.apache.kafka.common.serialization.StringSerializer
 import java.util.concurrent.TimeUnit.SECONDS
 import javax.annotation.PreDestroy
 import javax.inject.Inject
+import javax.inject.Named
 import javax.inject.Singleton
 import kotlin.text.Charsets.UTF_8
 

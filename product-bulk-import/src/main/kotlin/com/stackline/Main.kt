@@ -26,15 +26,15 @@ object Main {
     val productService = ProductService(
       ctx,
       client,
-      config.dataFilename,
+      config.dataDstFilename,
       config.apiProductWrite
     )
 //    val indexHandler = IndexHandler(config, esClient)
 //    indexHandler.handle(CreateIndex(config.esIndex))
 
     if (config.downloadFile) {
-      downloader.download(client, config.apiProductWrite, config.dataFilename)
-      downloader.decompress(config.dataUrl, config.dataFilename)
+      downloader.download(client, config.dataUrl, config.dataSrcFilename)
+      downloader.decompress(config.dataSrcFilename, config.dataDstFilename)
     }
 
     runBlocking(ctx) {
