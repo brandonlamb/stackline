@@ -1,6 +1,4 @@
-FROM adoptopenjdk/openjdk8-openj9:jdk8u162-b12_openj9-0.8.0
-#FROM adoptopenjdk/openjdk9-openj9:jdk-9.181
-#FROM adoptopenjdk/openjdk10-openj9:nightly
+FROM adoptopenjdk/openjdk11-openj9
 
 RUN apt-get update && \
     apt-get dist-upgrade -y && \
